@@ -5,6 +5,8 @@ import Table from "react-bootstrap/Table";
 import { Button } from "react-bootstrap";
 import { BiEdit } from "react-icons/bi";
 import { MdDeleteOutline } from "react-icons/md";
+import Modal from "../Modal/Modal";
+import { useModal } from "../../hooks/useModal";
 
 const Content = styled.div`
   width: 80%;
@@ -37,12 +39,80 @@ const Buttons = styled.td`
   align-items: center;
 `;
 
-export default function Admin(props) {
-  function onDelete(id) {
-    const newArr = props.data.filter((e) => e.id !== id);
-    console.log(newArr);
-    // props.setData({ ...newArr });
-  }
+export default function Admin() {
+  const [data, setData] = React.useState([
+    {
+      id: 1,
+      name: "Karimov.N.A",
+      obektivka: "obektivka-1.pdf",
+      turdavoy: "turdavoy-1.pdf",
+      staj: "35",
+      lavozimi: "mexanik",
+      pasport: "AA1235689",
+      manzil: "Toshkent shahar",
+      tell: +998991234455,
+      filial: "Toshkent",
+    },
+    {
+      id: 2,
+      name: "To'rayev.B.R",
+      obektivka: "obektivka-2.pdf",
+      turdavoy: "turdavoy-2.pdf",
+      staj: "40",
+      lavozimi: "eliktrik",
+      pasport: "AA1235689",
+      manzil: "Toshkent shahar",
+      tell: +998991234455,
+      filial: "Samarqand",
+    },
+    {
+      id: 3,
+      name: "Rahmatov.Sh.A",
+      obektivka: "obektivka-3.pdf",
+      turdavoy: "turdavoy-3.pdf",
+      staj: "30",
+      lavozimi: "Programmist",
+      pasport: "AA1235620",
+      manzil: "Toshkent shahar",
+      tell: +998991234455,
+      filial: "Termiz",
+    },
+    {
+      id: 3,
+      name: "Rahmatov.Sh.A",
+      obektivka: "obektivka-3.pdf",
+      turdavoy: "turdavoy-3.pdf",
+      staj: "30",
+      lavozimi: "Programmist",
+      pasport: "AA1235620",
+      manzil: "Toshkent shahar",
+      tell: +998991234455,
+      filial: "Termiz",
+    },
+    {
+      id: 3,
+      name: "Rahmatov.Sh.A",
+      obektivka: "obektivka-3.pdf",
+      turdavoy: "turdavoy-3.pdf",
+      staj: "30",
+      lavozimi: "Programmist",
+      pasport: "AA1235620",
+      manzil: "Toshkent shahar",
+      tell: +998991234455,
+      filial: "Termiz",
+    },
+  ]);
+  const Tablee = styled.div`
+    overflow-y: scroll;
+    height: 300px;
+    width: 100%;
+  `;
+  const Thead = styled.thead`
+    position: sticky;
+    background-color: grey;
+    top: 0;
+`;
+  const { modal, toggleModal, CloseModal } = useModal();
   return (
     <>
       <Content>
@@ -53,47 +123,58 @@ export default function Admin(props) {
               <Logo src={logo} />
             </Nav>
             <Input placeholder="search...." />
-            <Table striped bordered hover>
-              <thead>
-                <tr>
-                  <th>No</th>
-                  <th>First Name</th>
-                  <th>Last Name</th>
-                  <th>Username</th>
-                  <th>Username</th>
-                  <th>Username</th>
-                  <th>Username</th>
-                  <th>Username</th>
-                  <th>Username</th>
-                  <th>Username</th>
-                  <th>Username</th>
-                </tr>
-              </thead>
-              <tbody>
-                {props.person.map((i) => (
-                  <tr key={i.id}>
-                    <th>{i.id}</th>
-                    <td>{i.name}</td>
-                    <td>{i.obektivka}</td>
-                    <td>{i.turdavoy}</td>
-                    <td>{i.staj}</td>
-                    <td>{i.lavozimi}</td>
-                    <td>{i.pasport}</td>
-                    <td>{i.manzil}</td>
-                    <td>{i.tell}</td>
-                    <td>{i.filial}</td>
-                    <Buttons>
-                      <Button variant="primary">
-                        <BiEdit />
-                      </Button>
-                      <Button onClick={() => onDelete(i.id)} variant="danger">
-                        <MdDeleteOutline />
-                      </Button>
-                    </Buttons>
+            <Tablee>
+              <Table striped bordered hover>
+                <Thead>
+                  <tr>
+                    <th>No</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Username</th>
+                    <th>Username</th>
+                    <th>Username</th>
+                    <th>Username</th>
+                    <th>Username</th>
+                    <th>Username</th>
+                    <th>Username</th>
+                    <th>Username</th>
                   </tr>
-                ))}
-              </tbody>
-            </Table>
+                </Thead>
+                <tbody>
+                  {data.map((i, id) => (
+                    <tr key={id}>
+                      <th>{id + 1}</th>
+                      <td>{i.name}</td>
+                      <td>{i.obektivka}</td>
+                      <td>{i.turdavoy}</td>
+                      <td>{i.staj}</td>
+                      <td>{i.lavozimi}</td>
+                      <td>{i.pasport}</td>
+                      <td>{i.manzil}</td>
+                      <td>{i.tell}</td>
+                      <td>{i.filial}</td>
+                      <Buttons>
+                        <Button variant="primary">
+                          <BiEdit onClick={() => toggleModal()} />
+                        </Button>
+                        <Button
+                          id={id}
+                          onClick={() =>
+                            setData((item) => {
+                              return item.filter((e) => e.id !== i.id);
+                            })
+                          }
+                          variant="danger"
+                        >
+                          <MdDeleteOutline />
+                        </Button>
+                      </Buttons>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </Tablee>
+            {modal ? <Modal close={CloseModal} /> : null}
           </Box>
         </div>
       </Content>
